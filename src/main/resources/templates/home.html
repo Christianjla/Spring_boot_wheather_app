@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap Site</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <style>
+        body {
+            background-color: #333;
+            color: #eee;
+        }
+
+        .navbar,
+        .card,
+        .btn,
+        .form-control,
+        .border {
+            background-color: #444 !important;
+            color: #eee !important;
+        }
+
+        .bg-body-tertiary {
+            background-color: #333 !important;
+        }
+
+        .navbar-brand,
+        .nav-link,
+        .btn-outline-warning,
+        .btn-outline-success,
+        .btn-outline-primary,
+        .form-label {
+            color: #eee !important;
+        }
+
+        .bg-info-subtle {
+            background-color: #555 !important;
+        }
+
+        .bg-warning-subtle {
+            background-color: #666 !important;
+        }
+
+        .border-success {
+            border-color: #888 !important;
+        }
+
+        .comentarios h4 {
+            color: #ccc !important;
+        }
+    </style>
+
+    <div class="container">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark mb-3" data-bs-theme="dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">El MURO</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Link</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex" role="search">
+                        <div th:if="${session.user}" class="text-light me-3" th:text="${session.user.name}"></div>
+                        <a href="/logout" class="btn btn-outline-warning">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div th:replace="~{fragments/fragments :: alertas}"></div>
+        <div class="row">
+            <div class="col-3">
+                <h4>Sidebar</h4>
+
+                <div class="card" style="width: 18rem;">
+                    <img src="descarga.jpg" class="card-img-top" alt="...">
+                    <div class="card-body">
+                      <h5 class="card-title">Pronostico</h5>
+                      <p class="card-text" id="pronostico"></p>
+                      <a href="#" class="btn btn-primary">Ver más</a>
+                    </div>
+                  </div>
+                  
+
+                <h5 id="pronostico"></h5>
+            </div>
+            <div class="col-9">
+                <form class="p-4 bg-info-subtle rounded shadow">
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Agrega un Mensaje</label>
+                        <textarea name="message" class="form-control" placeholder="escribe acá"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-outline-success">Crear</button>
+                </form>
+                <div id="mensajes">
+                    <div th:each="m: ${messages}" class="card rounded shadow bg-warning-subtle m-2">
+                        <div class="card-body">
+                            <h5 class="card-title">[[${m.creatorsName}]]</h5>
+                            <p class="card-text">[[${m.message}]]</p>
+                            <form class="p-1" method="post" action="/comments">
+                                <div class="mb-3">
+                                    <input type="hidden" name="message_id" th:value="${m.id}">
+                                    <input type="hidden" name="user_id" th:value="${session.user.id}">
+                                    <label for="exampleInputEmail1" class="form-label">Comentar</label>
+                                    <textarea name="content" class="form-control"
+                                        placeholder="Leave a comment here"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-outline-primary">Crear</button>
+                            </form>
+                            <a href="#">Ver comentarios</a>
+                            <div class="lista-comentarios d-none">
+                                <div class="comentarios px-2 m-2 border border-success">
+                                    <h4>Pedro Picapiedras</h4>
+                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum quisquam fugit
+                                        minima excepturi nisi assumenda odio praesentium, nam tempore cumque quae quasi
+                                        vel voluptates. Officia dignissimos aspernatur nesciunt reiciendis recusandae.
+                                    </p>
+                                </div>
+                                <div class="comentarios px-2 m-2 border border-success">
+                                    <h4>Juanito Perez</h4>
+                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum quisquam fugit
+                                        minima excepturi nisi assumenda odio praesentium, nam tempore cumque quae quasi
+                                        vel voluptates. Officia dignissimos aspernatur nesciunt reiciendis recusandae.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="clima.js"></script>
+</body>
+
+</html>
